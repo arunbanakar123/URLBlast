@@ -181,7 +181,7 @@ Install URLBlast directly from the Chrome Web Store.
 1. Clone this repository.
 
 ```bash
-git clone https://github.com/yourusername/urlblast.git
+git clone https://github.com/arunbanakar123/URLBlast.git
 ```
 
 2. Open Chrome and navigate to:
