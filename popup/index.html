@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URLBlast - Tab & URL Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" fill="url(#bolt-grad)" stroke="url(#bolt-grad)" stroke-width="0.5" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="bolt-grad" x1="4" y1="3" x2="20" y2="21" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#818cf8"/>
+              <stop offset="100%" stop-color="#38bdf8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="logo-text">URL<span class="logo-accent">Blast</span></span>
+    </div>
+    <div class="header-actions">
+      <button id="btn-notifications" class="icon-btn" title="View notifications" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button id="btn-theme-toggle" class="icon-btn" title="Toggle dark/light mode" aria-label="Toggle theme">
+        <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" id="tab-current" data-tab="current" role="tab" aria-selected="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+      Current Tabs
+      <span class="tab-count" id="count-current">0</span>
+    </button>
+    <button class="tab-btn" id="tab-sessions" data-tab="sessions" role="tab" aria-selected="false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Sessions
+      <span class="tab-count" id="count-sessions">0</span>
+    </button>
+    <button class="tab-btn" id="tab-settings" data-tab="settings" role="tab" aria-selected="false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      Settings
+    </button>
+  </nav>
+
+  <!-- ============ TAB: CURRENT TABS ============ -->
+  <div class="tab-panel active" id="panel-current" role="tabpanel">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="search-input" placeholder="Search tabs by title or URL…" autocomplete="off" />
+        <button class="clear-search" id="btn-clear-search" title="Clear search" style="display:none">✕</button>
+      </div>
+      <div class="toolbar-right">
+        <button class="icon-btn" id="btn-select-all" title="Select / deselect all">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-refresh" title="Refresh tab list">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <span id="stats-text">Loading tabs…</span>
+      <span id="selected-text" class="selected-badge" style="display:none"></span>
+    </div>
+
+    <!-- Tab list -->
+    <div class="tab-list" id="tab-list" role="list"></div>
+
+    <!-- Actions bar -->
+    <div class="actions-bar">
+      <!-- Format selector -->
+      <div class="format-group">
+        <label class="format-label" for="format-select">Format</label>
+        <select id="format-select" class="format-select">
+          <option value="plain-url-only">URLs only</option>
+          <option value="plain" selected>Title + URL</option>
+          <option value="markdown">Markdown</option>
+          <option value="html">HTML</option>
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+          <option value="orgmode">Org-mode</option>
+        </select>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="btn-copy-selected">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Selected
+        </button>
+        <button class="btn btn-secondary" id="btn-copy-all">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy All
+        </button>
+      </div>
+    </div>
+
+    <!-- Secondary Actions -->
+    <div class="secondary-actions">
+      <button class="btn btn-ghost" id="btn-paste-open">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Paste & Open URLs
+      </button>
+      <button class="btn btn-ghost" id="btn-save-session">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+        Save Session
+      </button>
+      <button class="btn btn-ghost btn-ai" id="btn-ai-categorize">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+        AI Categorize
+      </button>
+    </div>
+
+    <!-- AI Results Panel -->
+    <div class="ai-panel" id="ai-panel" style="display:none">
+      <div class="ai-panel-header">
+        <span class="ai-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          AI Categorized Tabs
+        </span>
+        <button class="icon-btn" id="btn-ai-close" title="Close AI panel">✕</button>
+      </div>
+      <div id="ai-categories-list" class="ai-categories-list"></div>
+    </div>
+
+  </div><!-- end panel-current -->
+
+  <!-- ============ MODAL: SESSION NAME ============ -->
+  <div class="modal-overlay" id="modal-session" style="display:none">
+    <div class="modal-content">
+      <h3 class="modal-title" id="modal-session-title">Save Session</h3>
+      <input type="text" id="input-session-name" class="setting-input" placeholder="Session name..." />
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="btn-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="btn-modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: SAVED SESSIONS ============ -->
+  <div class="tab-panel" id="panel-sessions" role="tabpanel">
+    <div class="sessions-header">
+      <h2 class="section-title">Saved Sessions</h2>
+      <button class="btn btn-ghost btn-sm" id="btn-clear-sessions">Clear All</button>
+    </div>
+    <div id="sessions-list" class="sessions-list"></div>
+    <div class="empty-state" id="sessions-empty" style="display:none">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+      <p>No saved sessions yet.<br>Open some tabs and click "Save Session".</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB: SETTINGS ============ -->
+  <div class="tab-panel" id="panel-settings" role="tabpanel">
+    <div class="settings-content">
+      <h2 class="section-title">Settings</h2>
+
+      <div class="setting-group">
+        <div class="setting-group-title">Appearance</div>
+        <div class="setting-row">
+          <label for="setting-theme">Theme</label>
+          <select id="setting-theme" class="setting-select">
+            <option value="system" selected>System Default</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-group-title">Copy Behavior</div>
+        <div class="setting-row">
+          <label for="setting-default-format">Default Format</label>
+          <select id="setting-default-format" class="setting-select">
+            <option value="plain-url-only">URLs Only</option>
+            <option value="plain" selected>Title + URL</option>
+            <option value="markdown">Markdown</option>
+            <option value="html">HTML</option>
+            <option value="json">JSON</option>
+            <option value="csv">CSV</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label for="setting-skip-internal">Skip browser internal pages</label>
+          <input type="checkbox" id="setting-skip-internal" checked class="toggle-check" />
+        </div>
+        <div class="setting-row">
+          <label for="setting-include-pinned">Include pinned tabs</label>
+          <input type="checkbox" id="setting-include-pinned" checked class="toggle-check" />
+        </div>
+        <div class="setting-row">
+          <label for="setting-google-search-bulk-alert">Alert before opening >4 Google searches</label>
+          <input type="checkbox" id="setting-google-search-bulk-alert" checked class="toggle-check" />
+        </div>
+      </div>
+
+      <div class="setting-group setting-group-ai">
+        <div class="setting-group-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          AI Features (Free — Powered by Google Gemini)
+        </div>
+        <div class="setting-row setting-row-col">
+          <label for="setting-api-key">Gemini API Key</label>
+          <div class="api-key-wrap">
+            <input type="password" id="setting-api-key" placeholder="Paste your free Gemini API key here…" class="setting-input" autocomplete="off" />
+            <button class="icon-btn" id="btn-toggle-key" title="Show/hide key">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Get a free key from Google AI Studio (no credit card needed)
+          </a>
+        </div>
+        <div class="setting-row">
+          <label for="setting-ai-enabled">Enable AI Categorization</label>
+          <input type="checkbox" id="setting-ai-enabled" class="toggle-check" />
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-group-title">Keyboard Shortcuts</div>
+        <div class="shortcut-list">
+          <div class="shortcut-row">
+            <span>Open URLBlast popup</span>
+            <kbd>Alt+Y</kbd>
+          </div>
+          <div class="shortcut-row">
+            <span>Copy all URLs to clipboard</span>
+            <kbd>Alt+K</kbd>
+          </div>
+          <div class="shortcut-row">
+            <span>Open URLs from clipboard</span>
+            <kbd>Alt+V</kbd>
+          </div>
+        </div>
+        <button class="btn btn-secondary" id="btn-configure-shortcuts" style="width: 100%; margin-top: 12px; justify-content: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+            <path d="M7 15h.01"/><path d="M12 15h.01"/><path d="M17 15h.01"/>
+          </svg>
+          Configure Global Shortcuts
+        </button>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-group-title">About &amp; Support</div>
+        <div class="about-info">
+          <p><strong>URLBlast</strong> v1.0.0</p>
+          <p>A powerful tab &amp; URL manager for Chromium browsers.</p>
+          <p class="text-muted">Manifest V3 · Privacy First · No data collected</p>
+        </div>
+
+        <div class="setting-row" style="margin-top:8px; border-top: 1px solid var(--border); padding-top: 12px;">
+          <label for="setting-disable-donation-prompt">I have paid or am not interested (Hide monthly prompt)</label>
+          <input type="checkbox" id="setting-disable-donation-prompt" class="toggle-check" />
+        </div>
+        <div class="support-container" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+          <a class="btn-paypal-support" id="btn-support" href="support.html" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.067 8.478c.492.2.825.688.825 1.222v6.6c0 .534-.333 1.022-.825 1.222l-7.5 3c-.15.06-.309.09-.467.09s-.317-.03-.467-.09l-7.5-3c-.492-.2-.825-.688-.825-1.222v-6.6c0-.534.333-1.022.825-1.222l7.5-3c.3-.12.634-.12.934 0l7.5 3zM12 4.69l-5.3 2.12L12 8.93l5.3-2.12L12 4.69zm-6.3 4.38v4.86l5.3 2.12V11.19l-5.3-2.12zm12.6 0l-5.3 2.12v4.86l5.3-2.12V9.07z"/></svg>
+            Support URLBlast 💙
+          </a>
+        </div>
+      </div>
+
+
+      <button class="btn btn-primary btn-full" id="btn-save-settings">Save Settings</button>
+    </div>
+  </div>
+
+  <!-- Toast — must be direct child of body so position:fixed is not clipped -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>

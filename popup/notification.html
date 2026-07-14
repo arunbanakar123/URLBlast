@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URLBlast – Notifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0d1a;
+      --surface: #12121f;
+      --surface2: #1a1a2e;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      --accent: #818cf8;
+      --accent2: #38bdf8;
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --info: #818cf8;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --radius: 12px;
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1e1b4b, #0c1445);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(129, 140, 248, 0.3);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-accent {
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .notif-count-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      display: none;
+    }
+
+    .btn-clear-all {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dim);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: none;
+    }
+
+    .btn-clear-all:hover {
+      background: rgba(248, 113, 113, 0.1);
+      border-color: rgba(248, 113, 113, 0.4);
+      color: var(--error);
+    }
+
+    /* ── Main Layout ── */
+    .page-body {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .page-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Notification Feed ── */
+    #notif-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── Single Notification Card ── */
+    .notif-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      position: relative;
+      animation: slideIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      overflow: hidden;
+    }
+
+    .notif-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Left colour accent strip */
+    .notif-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .notif-card.success::before { background: var(--success); }
+    .notif-card.warning::before { background: var(--warning); }
+    .notif-card.error::before   { background: var(--error); }
+    .notif-card.info::before    { background: var(--info); }
+    .notif-card.donation::before { background: linear-gradient(180deg, #818cf8, #38bdf8); }
+
+    /* Icon bubble */
+    .notif-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .notif-card.success .notif-icon { background: rgba(74, 222, 128, 0.12); }
+    .notif-card.warning .notif-icon { background: rgba(251, 191, 36, 0.12); }
+    .notif-card.error   .notif-icon { background: rgba(248, 113, 113, 0.12); }
+    .notif-card.info    .notif-icon { background: rgba(129, 140, 248, 0.12); }
+    .notif-card.donation .notif-icon { background: rgba(129, 140, 248, 0.12); }
+
+    /* Text body */
+    .notif-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notif-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .notif-message {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+
+    .notif-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Action buttons inside card */
+    .notif-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .notif-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .notif-btn-primary {
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      color: #fff;
+    }
+    .notif-btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .notif-btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+    .notif-btn-ghost:hover {
+      background: var(--surface2);
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    /* Dismiss button */
+    .notif-dismiss {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--transition);
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .notif-dismiss:hover {
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--error);
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 80px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      opacity: 0.4;
+      line-height: 1;
+    }
+
+    .empty-state h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    /* ── Animations ── */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .notif-card.removing {
+      animation: slideOut 0.22s ease forwards;
+    }
+
+    @keyframes slideOut {
+      to { opacity: 0; transform: translateX(20px); height: 0; padding: 0; margin: 0; border: none; }
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="page-header">
+  <div class="header-brand">
+    <div class="logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" fill="url(#bolt-grad)" stroke="url(#bolt-grad)" stroke-width="0.5" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="bolt-grad" x1="4" y1="3" x2="20" y2="21" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#818cf8"/>
+            <stop offset="100%" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="logo-text">URL<span class="logo-accent">Blast</span></span>
+  </div>
+  <div class="header-right">
+    <span class="notif-count-badge" id="notif-count-badge"></span>
+    <button class="btn-clear-all" id="btn-clear-all">Clear All</button>
+  </div>
+</header>
+
+<!-- Body -->
+<main class="page-body">
+  <div class="page-title">Notifications</div>
+  <div id="notif-list">
+    <!-- Dynamically populated -->
+  </div>
+</main>
+
+<script>
+  // ── Notification store in chrome.storage.local ──────────────────────────────
+  const STORAGE_KEY = 'urlblast_notifications';
+
+  async function loadNotifications() {
+    try {
+      const { [STORAGE_KEY]: stored = [] } = await chrome.storage.local.get(STORAGE_KEY);
+      return stored;
+    } catch {
+      return [];
+    }
+  }
+
+  async function saveNotifications(list) {
+    try {
+      await chrome.storage.local.set({ [STORAGE_KEY]: list });
+    } catch {}
+  }
+
+  async function dismissNotification(id) {
+    const list = await loadNotifications();
+    await saveNotifications(list.filter(n => n.id !== id));
+    renderAll();
+  }
+
+  async function clearAll() {
+    await saveNotifications([]);
+    renderAll();
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+  function relativeTime(ts) {
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 5)  return 'just now';
+    if (diff < 60) return `${diff}s ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return new Date(ts).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  const ICON_MAP = {
+    success:  '✅',
+    warning:  '⚠️',
+    error:    '❌',
+    info:     'ℹ️',
+    donation: '☕'
+  };
+
+  function buildCard(notif) {
+    const card = document.createElement('div');
+    const type = notif.type || 'info';
+    card.className = `notif-card ${type}`;
+    card.dataset.id = notif.id;
+
+    let actionsHtml = '';
+    if (notif.actions && notif.actions.length > 0) {
+      const btns = notif.actions.map((a, i) =>
+        `<button class="notif-btn ${i === 0 ? 'notif-btn-primary' : 'notif-btn-ghost'}" data-action-idx="${i}">${a.label}</button>`
+      ).join('');
+      actionsHtml = `<div class="notif-actions">${btns}</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="notif-icon">${ICON_MAP[type] || 'ℹ️'}</div>
+      <div class="notif-body">
+        <div class="notif-title">${notif.title || 'URLBlast'}</div>
+        <div class="notif-message">${notif.message || ''}</div>
+        ${actionsHtml}
+        <div class="notif-time">${relativeTime(notif.timestamp || Date.now())}</div>
+      </div>
+      <button class="notif-dismiss" title="Dismiss">✕</button>
+    `;
+
+    // Dismiss
+    card.querySelector('.notif-dismiss').addEventListener('click', async () => {
+      card.classList.add('removing');
+      card.addEventListener('animationend', () => {
+        dismissNotification(notif.id);
+      }, { once: true });
+    });
+
+    // Action buttons
+    card.querySelectorAll('[data-action-idx]').forEach(btn => {
+      const idx = parseInt(btn.dataset.actionIdx);
+      btn.addEventListener('click', async () => {
+        const action = notif.actions[idx];
+        if (action.url) {
+          chrome.tabs.create({ url: action.url });
+        }
+        if (action.dismissOnClick !== false) {
+          dismissNotification(notif.id);
+        }
+        // Handle "don't show again" for donation
+        if (action.disableDonation) {
+          const { urlblast_settings = {} } = await chrome.storage.sync.get('urlblast_settings');
+          urlblast_settings.disableDonationPrompt = true;
+          await chrome.storage.sync.set({ urlblast_settings });
+        }
+      });
+    });
+
+    return card;
+  }
+
+  async function renderAll() {
+    const list = await loadNotifications();
+    const container = document.getElementById('notif-list');
+    const badge = document.getElementById('notif-count-badge');
+    const clearBtn = document.getElementById('btn-clear-all');
+
+    container.innerHTML = '';
+
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔔</div>
+          <h3>No notifications</h3>
+          <p>Actions like copying URLs, opening tabs from clipboard, and donation reminders will appear here.</p>
+        </div>
+      `;
+      badge.style.display = 'none';
+      clearBtn.style.display = 'none';
+      return;
+    }
+
+    badge.textContent = `${list.length} notification${list.length !== 1 ? 's' : ''}`;
+    badge.style.display = '';
+    clearBtn.style.display = '';
+
+    // Show newest first
+    [...list].reverse().forEach(n => {
+      container.appendChild(buildCard(n));
+    });
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  document.getElementById('btn-clear-all').addEventListener('click', clearAll);
+
+  // Listen for new notifications pushed from background
+  chrome.runtime.onMessage.addListener((msg) => {
+    if (msg.type === 'NOTIFICATION_ADDED') {
+      renderAll();
+    }
+  });
+
+  renderAll();
+</script>
+
+</body>
+</html>

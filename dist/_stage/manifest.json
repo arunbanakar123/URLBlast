@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "URLBlast - Tab & URL Manager",
+  "short_name": "URLBlast",
+  "version": "1.0.0",
+  "description": "Copy, paste, manage, and AI-categorize your open tabs. Export URLs in multiple formats, save sessions, and blast through your workflow.",
+  "author": "URLBlast",
+  "homepage_url": "https://github.com/urlblast",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "URLBlast - Tab & URL Manager"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "clipboardWrite",
+    "clipboardRead",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "commands": {
+    "copy-all-urls": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "Copy all open tab URLs to clipboard"
+    },
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Open URLBlast popup"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

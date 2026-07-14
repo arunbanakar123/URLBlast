@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Support URLBlast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0d1a; --card: #12121f; --border: rgba(255,255,255,0.08);
+      --accent: #818cf8; --accent2: #38bdf8; --text: #e2e8f0; --muted: #64748b;
+      --paypal: #0070ba; --gh: #f0f6fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      justify-content: flex-start; padding: 48px 20px;
+    }
+    .hero { text-align: center; margin-bottom: 40px; }
+    .logo {
+      width: 64px; height: 64px; border-radius: 16px;
+      background: linear-gradient(135deg, #1e1b4b, #0c1445);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; box-shadow: 0 0 32px rgba(129,140,248,0.3);
+    }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    h1 span { background: linear-gradient(135deg, #818cf8, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .subtitle { color: var(--muted); font-size: 15px; max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+    .cards { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 420px; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; text-align: center;
+    }
+
+    .card-title {
+      font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text);
+    }
+    .card-sub {
+      font-size: 13px; color: var(--muted); margin-bottom: 16px;
+    }
+
+    /* PayPal Card */
+    .card-paypal { border-color: rgba(0,112,186,0.4); }
+    .paypal-link {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--paypal); color: #fff; font-weight: 700; font-size: 15px;
+      padding: 13px 24px; border-radius: 10px; text-decoration: none;
+      transition: all 0.18s ease; box-shadow: 0 4px 16px rgba(0,112,186,0.25);
+    }
+    .paypal-link:hover { background: #0079c1; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,112,186,0.4); }
+
+    /* GitHub Card */
+    .gh-link {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: #21262d; color: var(--gh); font-weight: 600; font-size: 14px;
+      padding: 12px 24px; border-radius: 10px; text-decoration: none;
+      border: 1px solid rgba(240,246,252,0.1);
+      transition: all 0.18s ease;
+    }
+    .gh-link:hover { background: #30363d; transform: translateY(-2px); }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 32px; text-align: center;
+      font-size: 13px; color: var(--muted);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+      <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" fill="url(#g)" stroke="url(#g)" stroke-width="0.5" stroke-linejoin="round"/>
+      <defs><linearGradient id="g" x1="4" y1="3" x2="20" y2="21" gradientUnits="userSpaceOnUse"><stop stop-color="#818cf8"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs>
+    </svg>
+  </div>
+  <h1>Support <span>URLBlast</span></h1>
+  <p class="subtitle">URLBlast is free and open-source. If it helps you blast through your tabs, consider a small support! 🚀</p>
+</div>
+
+<div class="cards">
+
+  <!-- PayPal Card -->
+  <div class="card card-paypal">
+    <div class="card-title">💙 Support via PayPal</div>
+    <div class="card-sub">Secure payment via PayPal</div>
+    <a class="paypal-link" id="paypal-link" href="https://www.paypal.com/paypalme/arunbanakar123" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;"><path d="M20.067 8.478c.492.2.825.688.825 1.222v6.6c0 .534-.333 1.022-.825 1.222l-7.5 3c-.15.06-.309.09-.467.09s-.317-.03-.467-.09l-7.5-3c-.492-.2-.825-.688-.825-1.222v-6.6c0-.534.333-1.022.825-1.222l7.5-3c.3-.12.634-.12.934 0l7.5 3zM12 4.69l-5.3 2.12L12 8.93l5.3-2.12L12 4.69zm-6.3 4.38v4.86l5.3 2.12V11.19l-5.3-2.12zm12.6 0l-5.3 2.12v4.86l5.3-2.12V9.07z"/></svg>
+      <span>Support for URLBlast</span>
+    </a>
+  </div>
+
+  <!-- GitHub -->
+  <div class="card">
+    <div class="card-title">⭐ Star on GitHub</div>
+    <div class="card-sub">A star goes a long way — it's free!</div>
+    <a class="gh-link" id="gh-link" href="https://github.com/arunbanakar123/URLBlast" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      Star on GitHub
+    </a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>Made with ❤️ · <a href="#" id="back-link">← Back to URLBlast</a></p>
+</div>
+
+<script src="support.js"></script>
+</body>
+</html>
