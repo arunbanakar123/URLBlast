@@ -174,7 +174,7 @@ Designed to feel instant, even with hundreds of tabs.
 
 Install URLBlast directly from the Chrome Web Store.
 
-> *(Add your Chrome Web Store link here.)*
+
 
 ### From Source
 
